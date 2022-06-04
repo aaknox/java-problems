@@ -1,8 +1,10 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class EvaluationService {
 
@@ -14,8 +16,14 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String reverse(String string) {
+		String reversed = "";
+		char[] letters = string.toCharArray();
 		
-		return "";
+		for(int i = letters.length - 1; i > -1; i--) {
+			reversed += letters[i];
+		}
+		
+		return reversed;
 	}
 
 	/**
@@ -27,8 +35,24 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String result = "";
+		//replace dashes with whitespace in phrase
+		phrase = phrase.replace("-", " ");
+		
+		//separate phrase words by whitespace
+		String[] words = phrase.split(" ");
+		
+		//iterate through words array
+		for (int i = 0; i < words.length; i++) {
+			
+			//get and capitalize the first letter in each word
+			char letter = words[i].toUpperCase().charAt(0);
+			
+			//add letter to acronym
+			result += letter;
+		}
+		//return acronym
+		return result;
 	}
 
 	/**
@@ -81,18 +105,27 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			return (this.sideOne == this.sideTwo && this.sideTwo == this.sideThree) ? true : false;
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			int countOfSameSides = 0;
+			
+			if(this.sideOne == this.sideTwo) {
+				countOfSameSides++;
+			}else if(this.sideOne == this.sideThree) {
+				countOfSameSides++;
+			}else if(this.sideTwo == this.sideThree) {
+				countOfSameSides++;
+			}
+			
+			//false if no side is the same value => count = 0
+			//true if at least two sides are same value => count is >= 1
+			return (countOfSameSides >= 1) ? true : false;
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			return (this.sideOne != this.sideTwo && this.sideTwo != this.sideThree && this.sideOne != this.sideThree) ? true : false;
 		}
 
 	}
@@ -113,8 +146,60 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		//make a hashmap of letter values
+		Map<Character, Integer> scrabbleMap = new HashMap<Character, Integer>();
+		char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+		
+		for (int i = 0; i < alphabet.length; i++) {
+			switch (alphabet[i]) {
+			case 'q':
+			case 'z':
+				scrabbleMap.put(alphabet[i], 10);
+				break;
+				
+			case 'j':
+			case 'x':
+				scrabbleMap.put(alphabet[i], 8);
+				break;
+				
+			case 'k':
+				scrabbleMap.put(alphabet[i], 5);
+				break;
+				
+			case 'f':
+			case 'h':
+			case 'v':
+			case 'w':
+			case 'y':
+				scrabbleMap.put(alphabet[i], 4);
+				break;
+			
+			case 'b':
+			case 'c':
+			case 'm':
+			case 'p':
+				scrabbleMap.put(alphabet[i], 3);
+				break;
+
+			case 'g':
+				scrabbleMap.put(alphabet[i], 2);
+				break;
+			
+			default:
+				scrabbleMap.put(alphabet[i], 1);
+				break;
+			}
+		}
+		
+		//iterate through each character in string
+		int score = 0;
+		for (char letter : string.toLowerCase().toCharArray()) {
+			//add letter's points to total word points
+			score += scrabbleMap.get(letter);
+		}
+		
+		//return total word points
+		return score;
 	}
 
 	/**
@@ -149,8 +234,28 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		
+		//remove the country code if present as first character in string
+		if(string.charAt(0) == '1' || string.charAt(0) == '+') {
+			string = string.substring(0);
+		}
+		//now remove the special characters and whitespaces from phone number
+		string = string.replaceAll("[^A-Za-z0-9]", "");
+		String whitespace = " ";
+		string = string.replace(whitespace, "");
+		
+		//check if valid phone number
+		if(string.length() != 10) {
+			string = null;
+		}
+		
+		//if number was nulled out, then throw exception
+		if(string == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		//else return number reformatted
+		return string;
 	}
 
 	/**
@@ -163,8 +268,25 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		//remove commas and new lines from string
+		string = string.replace(",", " ");
+		string = string.replace("\n", " ");
+		String[] words = string.split(" ");
+		Map<String, Integer> count = new HashMap<String, Integer>();
+		for (String word : words) {
+			if(count.containsKey(word)) {
+				if(word.isBlank() == false) {
+					//increment count under given key by one in map
+					count.replace(word, count.get(word) + 1);
+				}
+			}else {
+				if(word.isBlank() == false) {
+					//add new entry into map
+					count.put(word, 1);
+				}
+			}
+		}
+		return count;
 	}
 
 	/**
