@@ -1,6 +1,7 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -329,22 +330,20 @@ public class EvaluationService {
 
 		public int indexOf(T t) {
 			//define our left and rightmost elements in list
-			//Integer[] array = sortedList.toArray(new Integer[sortedList.size()]);
 			int[] array = new int[sortedList.size()];
 			for (int i = 0; i < array.length; i++) {
 				array[i] = Integer.parseInt(String.valueOf(sortedList.get(i)));
 			}
 			
 			int target = Integer.parseInt(String.valueOf(t));
-			int left = array[0];
-			int right = array[array.length - 1];
+			int left = 0;
+			int right = array.length - 1;
 			
 			while(left <= right) {
 				//define the mid point of both sides
 				int mid = left + (right - left)/2;
 				
 				//check if target located at midpoint
-				System.out.println(array[mid]);
 				if(array[mid] == target) {
 					return mid;
 				}
@@ -384,18 +383,53 @@ public class EvaluationService {
 	 * difficult for non-children (and non-native speakers) to understand.
 	 * 
 	 * Rule 1: If a word begins with a vowel sound, add an "ay" sound to the end of
-	 * the word. Rule 2: If a word begins with a consonant sound, move it to the end
-	 * of the word, and then add an "ay" sound to the end of the word. There are a
-	 * few more rules for edge cases, and there are regional variants too.
+	 * the word. 
+	 * 
+	 * Rule 2: If a word begins with a consonant sound, move it to the end
+	 * of the word, and then add an "ay" sound to the end of the word. 
+	 * 
+	 * There are a few more rules for edge cases, and there are regional variants too.
 	 * 
 	 * See http://en.wikipedia.org/wiki/Pig_latin for more details.
 	 * 
 	 * @param string
 	 * @return
 	 */
+	
+	public boolean isVowel(char letter) {
+		String vowels = "aeiou";
+		return vowels.indexOf(letter) != -1;
+	}
+	
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		int size = string.length();
+		String pigLatin = "";
+		int i = 0;
+		String[] words = string.split(" ");
+		for (String word : words) {
+			for (i = 0; i < size; i++) {
+				if(isVowel(word.charAt(i))) {
+					break;
+				}
+			}
+			
+			if(i == size) {
+				return "";
+			}
+			
+			if(word == words[0]) {
+				pigLatin = word.substring(i);
+				pigLatin += word.substring(0, i);
+				pigLatin += "ay";
+			}else {
+				pigLatin += " ";
+				pigLatin += word.substring(i);
+				pigLatin += word.substring(0, i);
+				pigLatin += "ay";
+			}
+		}
+		
+		return pigLatin;
 	}
 
 	/**
