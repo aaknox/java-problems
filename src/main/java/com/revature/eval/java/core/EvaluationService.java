@@ -1,6 +1,7 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -438,18 +439,31 @@ public class EvaluationService {
 	 * 
 	 * For example:
 	 * 
-	 * 9 is an Armstrong number, because 9 = 9^1 = 9 10 is not an Armstrong number,
-	 * because 10 != 1^2 + 0^2 = 2 153 is an Armstrong number, because: 153 = 1^3 +
-	 * 5^3 + 3^3 = 1 + 125 + 27 = 153 154 is not an Armstrong number, because: 154
-	 * != 1^3 + 5^3 + 4^3 = 1 + 125 + 64 = 190 Write some code to determine whether
-	 * a number is an Armstrong number.
+	 * - 9 is an Armstrong number, because 9 = 9^1 = 9 
+	 * 
+	 * - 10 is not an Armstrong number, because 10 != 1^2 + 0^2 = 2 
+	 * 
+	 * - 153 is an Armstrong number, because: 153 = 1^3 +
+	 * 5^3 + 3^3 = 1 + 125 + 27 = 153 
+	 * 
+	 * - 154 is not an Armstrong number, because: 154
+	 * != 1^3 + 5^3 + 4^3 = 1 + 125 + 64 = 190 
+	 * 
+	 * Write some code to determine whether a number is an Armstrong number.
 	 * 
 	 * @param input
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		int result = 0;
+		int digitCount = ((int) Math.floor(Math.log10(input))) + 1;
+		char[] numbers = String.valueOf(input).toCharArray();
+		
+		for (char num : numbers) {
+			result += ((int) Math.pow(Integer.parseInt(String.valueOf(num)), digitCount));
+		}
+		
+		return (result == input) ? true : false;
 	}
 
 	/**
@@ -463,8 +477,16 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		List<Long> primeFactors = new ArrayList<>();
+		
+		for (int i = 2; i <= l; i++) {
+			while(l%i == 0) {
+				l /= i;
+				primeFactors.add((long) i);
+			}
+		}
+		
+		return primeFactors;
 	}
 
 	/**
@@ -481,17 +503,21 @@ public class EvaluationService {
 	 * 
 	 * A ROT13 on the Latin alphabet would be as follows:
 	 * 
-	 * Plain: abcdefghijklmnopqrstuvwxyz Cipher: nopqrstuvwxyzabcdefghijklm It is
-	 * stronger than the Atbash cipher because it has 27 possible keys, and 25
+	 * Plain: abcdefghijklmnopqrstuvwxyz 
+	 * Cipher: nopqrstuvwxyzabcdefghijklm 
+	 * It is stronger than the Atbash cipher because it has 27 possible keys, and 25
 	 * usable keys.
 	 * 
 	 * Ciphertext is written out in the same formatting as the input including
 	 * spaces and punctuation.
 	 * 
-	 * Examples: ROT5 omg gives trl ROT0 c gives c ROT26 Cool gives Cool ROT13 The
-	 * quick brown fox jumps over the lazy dog. gives Gur dhvpx oebja sbk whzcf bire
-	 * gur ynml qbt. ROT13 Gur dhvpx oebja sbk whzcf bire gur ynml qbt. gives The
-	 * quick brown fox jumps over the lazy dog.
+	 * Examples: 
+	 * ROT5 omg gives trl 
+	 * ROT0 c gives c 
+	 * ROT26 Cool gives Cool 
+	 * ROT13 The quick brown fox jumps over the lazy dog. gives: Gur dhvpx oebja sbk whzcf bire
+	 * gur ynml qbt. 
+	 * ROT13 Gur dhvpx oebja sbk whzcf bire gur ynml qbt. gives: The quick brown fox jumps over the lazy dog.
 	 */
 	static class RotationalCipher {
 		private int key;
