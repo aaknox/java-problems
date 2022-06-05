@@ -324,12 +324,41 @@ public class EvaluationService {
 	 * binary search is a dichotomic divide and conquer search algorithm.
 	 * 
 	 */
-	static class BinarySearch<T> {
+	static class BinarySearch<T>{
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
-			return 0;
+			//define our left and rightmost elements in list
+			//Integer[] array = sortedList.toArray(new Integer[sortedList.size()]);
+			int[] array = new int[sortedList.size()];
+			for (int i = 0; i < array.length; i++) {
+				array[i] = Integer.parseInt(String.valueOf(sortedList.get(i)));
+			}
+			
+			int target = Integer.parseInt(String.valueOf(t));
+			int left = array[0];
+			int right = array[array.length - 1];
+			
+			while(left <= right) {
+				//define the mid point of both sides
+				int mid = left + (right - left)/2;
+				
+				//check if target located at midpoint
+				System.out.println(array[mid]);
+				if(array[mid] == target) {
+					return mid;
+				}
+				
+				if(array[mid] < (int) target) {
+					//if target is greater than midpoint, ignore the left side
+					left = mid + 1;
+				}else {
+					//if target is less than midpoint, ignore the right side
+					right = mid - 1;
+				}
+			}
+			
+			return -1;
 		}
 
 		public BinarySearch(List<T> sortedList) {
