@@ -528,8 +528,41 @@ public class EvaluationService {
 		}
 
 		public String rotate(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			String result = "";
+			key %= 26;
+			char current;
+			
+			for(int i = 0; i < string.length(); i++) {
+				current = string.charAt(i);
+				
+				//check if current is letter or number
+				if(Character.isLetter(current)) {
+					//check if letter is capitalized or not
+					if(Character.isUpperCase(current)) {
+						//capitalized
+						if(current + key > 'Z') {
+							current = (char) (current + key);
+							current = (char) (current - 26);
+							result += current;
+						}else {
+							result += (char) (current + key);
+						}
+					}else {
+						//lowercased
+						if(current + key > 'z') {
+							current = (char) (current + key);
+							current = (char) (current - 26);
+							result += current;
+						}else {
+							result += (char) (current + key);
+						}
+					}
+				}else {
+					//not a letter
+					result += current;
+				}
+			}
+			return result;
 		}
 
 	}
@@ -546,9 +579,32 @@ public class EvaluationService {
 	 * @param i
 	 * @return
 	 */
+	
 	public int calculateNthPrime(int i) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		int target, count, index;
+		target = 1;
+		count = 0;
+		
+		while(count < i) {
+			target += 1;
+			for(index = 2; index <= target; index++) {
+				if(target % index == 0) {
+					break;
+				}
+			}
+			
+			if(index == target) {
+				count += 1;
+			}
+		}
+		
+		if(target == 1) {
+			throw new IllegalArgumentException();
+		}
+		
+		//next prime found!
+		//System.out.println(String.format("Value of %dth prime number: %d", i, target));
+		return target;
 	}
 
 	/**
