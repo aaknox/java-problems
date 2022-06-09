@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 public class EvaluationService {
@@ -20,11 +21,11 @@ public class EvaluationService {
 	public String reverse(String string) {
 		String reversed = "";
 		char[] letters = string.toCharArray();
-		
-		for(int i = letters.length - 1; i > -1; i--) {
+
+		for (int i = letters.length - 1; i > -1; i--) {
 			reversed += letters[i];
 		}
-		
+
 		return reversed;
 	}
 
@@ -38,22 +39,22 @@ public class EvaluationService {
 	 */
 	public String acronym(String phrase) {
 		String result = "";
-		//replace dashes with whitespace in phrase
+		// replace dashes with whitespace in phrase
 		phrase = phrase.replace("-", " ");
-		
-		//separate phrase words by whitespace
+
+		// separate phrase words by whitespace
 		String[] words = phrase.split(" ");
-		
-		//iterate through words array
+
+		// iterate through words array
 		for (int i = 0; i < words.length; i++) {
-			
-			//get and capitalize the first letter in each word
+
+			// get and capitalize the first letter in each word
 			char letter = words[i].toUpperCase().charAt(0);
-			
-			//add letter to acronym
+
+			// add letter to acronym
 			result += letter;
 		}
-		//return acronym
+		// return acronym
 		return result;
 	}
 
@@ -112,22 +113,24 @@ public class EvaluationService {
 
 		public boolean isIsosceles() {
 			int countOfSameSides = 0;
-			
-			if(this.sideOne == this.sideTwo) {
+
+			if (this.sideOne == this.sideTwo) {
 				countOfSameSides++;
-			}else if(this.sideOne == this.sideThree) {
+			} else if (this.sideOne == this.sideThree) {
 				countOfSameSides++;
-			}else if(this.sideTwo == this.sideThree) {
+			} else if (this.sideTwo == this.sideThree) {
 				countOfSameSides++;
 			}
-			
-			//false if no side is the same value => count = 0
-			//true if at least two sides are same value => count is >= 1
+
+			// false if no side is the same value => count = 0
+			// true if at least two sides are same value => count is >= 1
 			return (countOfSameSides >= 1) ? true : false;
 		}
 
 		public boolean isScalene() {
-			return (this.sideOne != this.sideTwo && this.sideTwo != this.sideThree && this.sideOne != this.sideThree) ? true : false;
+			return (this.sideOne != this.sideTwo && this.sideTwo != this.sideThree && this.sideOne != this.sideThree)
+					? true
+					: false;
 		}
 
 	}
@@ -148,26 +151,26 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		//make a hashmap of letter values
+		// make a hashmap of letter values
 		Map<Character, Integer> scrabbleMap = new HashMap<Character, Integer>();
 		char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-		
+
 		for (int i = 0; i < alphabet.length; i++) {
 			switch (alphabet[i]) {
 			case 'q':
 			case 'z':
 				scrabbleMap.put(alphabet[i], 10);
 				break;
-				
+
 			case 'j':
 			case 'x':
 				scrabbleMap.put(alphabet[i], 8);
 				break;
-				
+
 			case 'k':
 				scrabbleMap.put(alphabet[i], 5);
 				break;
-				
+
 			case 'f':
 			case 'h':
 			case 'v':
@@ -175,7 +178,7 @@ public class EvaluationService {
 			case 'y':
 				scrabbleMap.put(alphabet[i], 4);
 				break;
-			
+
 			case 'b':
 			case 'c':
 			case 'm':
@@ -186,21 +189,21 @@ public class EvaluationService {
 			case 'g':
 				scrabbleMap.put(alphabet[i], 2);
 				break;
-			
+
 			default:
 				scrabbleMap.put(alphabet[i], 1);
 				break;
 			}
 		}
-		
-		//iterate through each character in string
+
+		// iterate through each character in string
 		int score = 0;
 		for (char letter : string.toLowerCase().toCharArray()) {
-			//add letter's points to total word points
+			// add letter's points to total word points
 			score += scrabbleMap.get(letter);
 		}
-		
-		//return total word points
+
+		// return total word points
 		return score;
 	}
 
@@ -236,27 +239,27 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		
-		//remove the country code if present as first character in string
-		if(string.charAt(0) == '1' || string.charAt(0) == '+') {
+
+		// remove the country code if present as first character in string
+		if (string.charAt(0) == '1' || string.charAt(0) == '+') {
 			string = string.substring(0);
 		}
-		//now remove the special characters and whitespaces from phone number
+		// now remove the special characters and whitespaces from phone number
 		string = string.replaceAll("[^A-Za-z0-9]", "");
 		String whitespace = " ";
 		string = string.replace(whitespace, "");
-		
-		//check if valid phone number
-		if(string.length() != 10) {
+
+		// check if valid phone number
+		if (string.length() != 10) {
 			string = null;
 		}
-		
-		//if number was nulled out, then throw exception
-		if(string == null) {
+
+		// if number was nulled out, then throw exception
+		if (string == null) {
 			throw new IllegalArgumentException();
 		}
-		
-		//else return number reformatted
+
+		// else return number reformatted
 		return string;
 	}
 
@@ -270,20 +273,20 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		//remove commas and new lines from string
+		// remove commas and new lines from string
 		string = string.replace(",", " ");
 		string = string.replace("\n", " ");
 		String[] words = string.split(" ");
 		Map<String, Integer> count = new HashMap<String, Integer>();
 		for (String word : words) {
-			if(count.containsKey(word)) {
-				if(word.isBlank() == false) {
-					//increment count under given key by one in map
+			if (count.containsKey(word)) {
+				if (word.isBlank() == false) {
+					// increment count under given key by one in map
 					count.replace(word, count.get(word) + 1);
 				}
-			}else {
-				if(word.isBlank() == false) {
-					//add new entry into map
+			} else {
+				if (word.isBlank() == false) {
+					// add new entry into map
 					count.put(word, 1);
 				}
 			}
@@ -326,38 +329,38 @@ public class EvaluationService {
 	 * binary search is a dichotomic divide and conquer search algorithm.
 	 * 
 	 */
-	static class BinarySearch<T>{
+	static class BinarySearch<T> {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
-			//define our left and rightmost elements in list
+			// define our left and rightmost elements in list
 			int[] array = new int[sortedList.size()];
 			for (int i = 0; i < array.length; i++) {
 				array[i] = Integer.parseInt(String.valueOf(sortedList.get(i)));
 			}
-			
+
 			int target = Integer.parseInt(String.valueOf(t));
 			int left = 0;
 			int right = array.length - 1;
-			
-			while(left <= right) {
-				//define the mid point of both sides
-				int mid = left + (right - left)/2;
-				
-				//check if target located at midpoint
-				if(array[mid] == target) {
+
+			while (left <= right) {
+				// define the mid point of both sides
+				int mid = left + (right - left) / 2;
+
+				// check if target located at midpoint
+				if (array[mid] == target) {
 					return mid;
 				}
-				
-				if(array[mid] < (int) target) {
-					//if target is greater than midpoint, ignore the left side
+
+				if (array[mid] < (int) target) {
+					// if target is greater than midpoint, ignore the left side
 					left = mid + 1;
-				}else {
-					//if target is less than midpoint, ignore the right side
+				} else {
+					// if target is less than midpoint, ignore the right side
 					right = mid - 1;
 				}
 			}
-			
+
 			return -1;
 		}
 
@@ -384,24 +387,25 @@ public class EvaluationService {
 	 * difficult for non-children (and non-native speakers) to understand.
 	 * 
 	 * Rule 1: If a word begins with a vowel sound, add an "ay" sound to the end of
-	 * the word. 
+	 * the word.
 	 * 
-	 * Rule 2: If a word begins with a consonant sound, move it to the end
-	 * of the word, and then add an "ay" sound to the end of the word. 
+	 * Rule 2: If a word begins with a consonant sound, move it to the end of the
+	 * word, and then add an "ay" sound to the end of the word.
 	 * 
-	 * There are a few more rules for edge cases, and there are regional variants too.
+	 * There are a few more rules for edge cases, and there are regional variants
+	 * too.
 	 * 
 	 * See http://en.wikipedia.org/wiki/Pig_latin for more details.
 	 * 
 	 * @param string
 	 * @return
 	 */
-	
+
 	public boolean isVowel(char letter) {
 		String vowels = "aeiou";
 		return vowels.indexOf(letter) != -1;
 	}
-	
+
 	public String toPigLatin(String string) {
 		int size = string.length();
 		String pigLatin = "";
@@ -409,27 +413,27 @@ public class EvaluationService {
 		String[] words = string.split(" ");
 		for (String word : words) {
 			for (i = 0; i < size; i++) {
-				if(isVowel(word.charAt(i))) {
+				if (isVowel(word.charAt(i))) {
 					break;
 				}
 			}
-			
-			if(i == size) {
+
+			if (i == size) {
 				return "";
 			}
-			
-			if(word == words[0]) {
+
+			if (word == words[0]) {
 				pigLatin = word.substring(i);
 				pigLatin += word.substring(0, i);
 				pigLatin += "ay";
-			}else {
+			} else {
 				pigLatin += " ";
 				pigLatin += word.substring(i);
 				pigLatin += word.substring(0, i);
 				pigLatin += "ay";
 			}
 		}
-		
+
 		return pigLatin;
 	}
 
@@ -439,15 +443,15 @@ public class EvaluationService {
 	 * 
 	 * For example:
 	 * 
-	 * - 9 is an Armstrong number, because 9 = 9^1 = 9 
+	 * - 9 is an Armstrong number, because 9 = 9^1 = 9
 	 * 
-	 * - 10 is not an Armstrong number, because 10 != 1^2 + 0^2 = 2 
+	 * - 10 is not an Armstrong number, because 10 != 1^2 + 0^2 = 2
 	 * 
-	 * - 153 is an Armstrong number, because: 153 = 1^3 +
-	 * 5^3 + 3^3 = 1 + 125 + 27 = 153 
+	 * - 153 is an Armstrong number, because: 153 = 1^3 + 5^3 + 3^3 = 1 + 125 + 27 =
+	 * 153
 	 * 
-	 * - 154 is not an Armstrong number, because: 154
-	 * != 1^3 + 5^3 + 4^3 = 1 + 125 + 64 = 190 
+	 * - 154 is not an Armstrong number, because: 154 != 1^3 + 5^3 + 4^3 = 1 + 125 +
+	 * 64 = 190
 	 * 
 	 * Write some code to determine whether a number is an Armstrong number.
 	 * 
@@ -458,11 +462,11 @@ public class EvaluationService {
 		int result = 0;
 		int digitCount = ((int) Math.floor(Math.log10(input))) + 1;
 		char[] numbers = String.valueOf(input).toCharArray();
-		
+
 		for (char num : numbers) {
 			result += ((int) Math.pow(Integer.parseInt(String.valueOf(num)), digitCount));
 		}
-		
+
 		return (result == input) ? true : false;
 	}
 
@@ -478,14 +482,14 @@ public class EvaluationService {
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
 		List<Long> primeFactors = new ArrayList<>();
-		
+
 		for (int i = 2; i <= l; i++) {
-			while(l%i == 0) {
+			while (l % i == 0) {
 				l /= i;
 				primeFactors.add((long) i);
 			}
 		}
-		
+
 		return primeFactors;
 	}
 
@@ -503,21 +507,17 @@ public class EvaluationService {
 	 * 
 	 * A ROT13 on the Latin alphabet would be as follows:
 	 * 
-	 * Plain: abcdefghijklmnopqrstuvwxyz 
-	 * Cipher: nopqrstuvwxyzabcdefghijklm 
-	 * It is stronger than the Atbash cipher because it has 27 possible keys, and 25
+	 * Plain: abcdefghijklmnopqrstuvwxyz Cipher: nopqrstuvwxyzabcdefghijklm It is
+	 * stronger than the Atbash cipher because it has 27 possible keys, and 25
 	 * usable keys.
 	 * 
 	 * Ciphertext is written out in the same formatting as the input including
 	 * spaces and punctuation.
 	 * 
-	 * Examples: 
-	 * ROT5 omg gives trl 
-	 * ROT0 c gives c 
-	 * ROT26 Cool gives Cool 
-	 * ROT13 The quick brown fox jumps over the lazy dog. gives: Gur dhvpx oebja sbk whzcf bire
-	 * gur ynml qbt. 
-	 * ROT13 Gur dhvpx oebja sbk whzcf bire gur ynml qbt. gives: The quick brown fox jumps over the lazy dog.
+	 * Examples: ROT5 omg gives trl ROT0 c gives c ROT26 Cool gives Cool ROT13 The
+	 * quick brown fox jumps over the lazy dog. gives: Gur dhvpx oebja sbk whzcf
+	 * bire gur ynml qbt. ROT13 Gur dhvpx oebja sbk whzcf bire gur ynml qbt. gives:
+	 * The quick brown fox jumps over the lazy dog.
 	 */
 	static class RotationalCipher {
 		private int key;
@@ -531,34 +531,34 @@ public class EvaluationService {
 			String result = "";
 			key %= 26;
 			char current;
-			
-			for(int i = 0; i < string.length(); i++) {
+
+			for (int i = 0; i < string.length(); i++) {
 				current = string.charAt(i);
-				
-				//check if current is letter or number
-				if(Character.isLetter(current)) {
-					//check if letter is capitalized or not
-					if(Character.isUpperCase(current)) {
-						//capitalized
-						if(current + key > 'Z') {
+
+				// check if current is letter or number
+				if (Character.isLetter(current)) {
+					// check if letter is capitalized or not
+					if (Character.isUpperCase(current)) {
+						// capitalized
+						if (current + key > 'Z') {
 							current = (char) (current + key);
 							current = (char) (current - 26);
 							result += current;
-						}else {
+						} else {
 							result += (char) (current + key);
 						}
-					}else {
-						//lowercased
-						if(current + key > 'z') {
+					} else {
+						// lowercased
+						if (current + key > 'z') {
 							current = (char) (current + key);
 							current = (char) (current - 26);
 							result += current;
-						}else {
+						} else {
 							result += (char) (current + key);
 						}
 					}
-				}else {
-					//not a letter
+				} else {
+					// not a letter
 					result += current;
 				}
 			}
@@ -579,31 +579,32 @@ public class EvaluationService {
 	 * @param i
 	 * @return
 	 */
-	
+
 	public int calculateNthPrime(int i) {
 		int target, count, index;
 		target = 1;
 		count = 0;
-		
-		while(count < i) {
+
+		while (count < i) {
 			target += 1;
-			for(index = 2; index <= target; index++) {
-				if(target % index == 0) {
+			for (index = 2; index <= target; index++) {
+				if (target % index == 0) {
 					break;
 				}
 			}
-			
-			if(index == target) {
+
+			if (index == target) {
 				count += 1;
 			}
 		}
-		
-		if(target == 1) {
+
+		if (target == 1) {
 			throw new IllegalArgumentException();
 		}
-		
-		//next prime found!
-		//System.out.println(String.format("Value of %dth prime number: %d", i, target));
+
+		// next prime found!
+		// System.out.println(String.format("Value of %dth prime number: %d", i,
+		// target));
 		return target;
 	}
 
@@ -627,7 +628,7 @@ public class EvaluationService {
 	 * size being 5 letters, and punctuation is excluded. This is to make it harder
 	 * to guess things based on word boundaries.
 	 * 
-	 * Examples Encoding test gives gvhg Decoding gvhg gives test Decoding gsvjf
+	 * Examples: Encoding test gives gvhg Decoding gvhg gives test Decoding gsvjf
 	 * rxpyi ldmul cqfnk hlevi gsvoz abwlt gives thequickbrownfoxjumpsoverthelazydog
 	 *
 	 */
@@ -639,9 +640,45 @@ public class EvaluationService {
 		 * @param string
 		 * @return
 		 */
+		
+		public static String transform(String text) {
+			//\W = any character that is not a word
+			//here we are replace 1+ non-words with empty char
+			return text.replaceAll("\\W+", "")
+					//lowercase all letter in string
+					.toLowerCase()
+					//The codePoints() = gets a stream of code point values from the given sequence
+					//returns the ASCII values of the characters passed as an argument
+					.codePoints()
+					// returns a stream consisting of the results of applying the given 
+					//function to the elements of this stream
+					// true if char is letter value then return the reverse ASCII value of that letter 
+					//and append to output
+					//false return original ascii value of that character
+					.map(code -> Character.isAlphabetic(code)
+		                ? 2 * ((int) 'a') + 25 - code
+		                : code
+					)
+					//collect() = allow to perform operations on our output results 
+					//= appending chars to output string using StringBuilder
+					.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+					.toString();
+		}
+
 		public static String encode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			//regex explanation:
+			/*
+			 * CapturingGroup
+				ZeroWidthPositiveLookbehind
+				Sequence: match all of the followings in order
+				EndOfPreviousMatch
+				Repeat
+				AnyCharacterExcept\n
+				5 times
+			 */
+			//meaning: every 5 characters will have a space between them as long as they match regex pattern
+			String output = String.join(" ", transform(string).split("(?<=\\G.{5})"));
+			return output;
 		}
 
 		/**
@@ -651,8 +688,8 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String decode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			String output = transform(string);
+			return output;
 		}
 	}
 
@@ -679,8 +716,35 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isValidIsbn(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		System.out.println(string);
+		String target = string.replaceAll("-", "");
+		System.out.println(target);
+		char[] numbers = target.toCharArray();
+		int count;
+		int i = 0;
+		Map<String, Character> map = new HashMap<>();
+		for(count = 1; count <= 10; count++) {
+			map.put("x"+ count, numbers[i]);
+			i++;
+		}
+		System.out.println(map.toString());
+		if(map.get("x10") == 'X') {
+			System.out.println("Last digit is X - returning true \n");
+			return true;
+		}else {
+			int calc = Math.floorMod((map.get("x1") * 10 
+					+ map.get("x2") * 9 
+					+ map.get("x3") * 8 
+					+ map.get("x4") * 7 
+					+ map.get("x5") * 6 
+					+ map.get("x6") * 5 
+					+ map.get("x7") * 4 
+					+ map.get("x8") * 3 
+					+ map.get("x9") * 2 
+					+ map.get("x10") * 1), 11);
+			System.out.println("RESULT: " + calc + "\n");
+			return calc == 0 ? true : false;
+		}
 	}
 
 	/**
