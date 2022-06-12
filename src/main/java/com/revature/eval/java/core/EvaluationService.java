@@ -874,12 +874,16 @@ public class EvaluationService {
 	 * allowed in the input, but they should be stripped before checking. All other
 	 * non-digit characters are disallowed.
 	 * 
-	 * Example 1: valid credit card number 1 4539 1488 0343 6467 The first step of
-	 * the Luhn algorithm is to double every second digit, starting from the right.
-	 * We will be doubling
+	 * Example 1: 
+	 * valid credit card number 1 = 4539 1488 0343 6467 
+	 * The first step of the Luhn algorithm is to double every second digit, 
+	 * starting from the right.
 	 * 
-	 * 4_3_ 1_8_ 0_4_ 6_6_ If doubling the number results in a number greater than 9
+	 * We will be doubling 4_3_ 1_8_ 0_4_ 6_6_ 
+	 * 
+	 * If doubling the number results in a number greater than 9
 	 * then subtract 9 from the product. The results of our doubling:
+	 * 8_6_ 2_16_ 0_8_ 12_12_ ==> 8_6_2_7_0_8_3_3
 	 * 
 	 * 8569 2478 0383 3437 Then sum all of the digits:
 	 * 
@@ -898,8 +902,38 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isLuhnValid(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		//1. format string to have spaces if no invalid characters are present
+		if(string.matches(".*[a-zA-Z]+.*") || string.contains("-")) {
+			return false;
+		}else if(string.trim().length() <= 1) {
+			return false;
+		}else {
+			String target = string.replaceAll(" ", "");
+			int[] numbers = target.chars().map(x -> x - '0').toArray();
+			List<Integer> results = new ArrayList<>();
+			int count = 0;
+			
+			for (int i = numbers.length-1; i >= 0; i--) {
+				if(i % 2 == 1) {
+					 results.add(Integer.valueOf(numbers[i] * 2));
+					 count++;
+				}else {
+					results.add(Integer.valueOf(numbers[i]));
+				}
+			}
+			
+			//checking if any digit is greater than 9
+			for(int j = 0; j < results.size(); j++) {
+				int num = results.get(j);
+				if(num > 9) {
+					num = num%10 + num/10;
+					results.set(j, num);
+				}
+			}
+			int[] ints = results.stream().mapToInt(i -> i).toArray();
+			int answer = Arrays.stream(ints).sum();
+			return answer % 10 == 0 ? true : false;
+		}
 	}
 
 	/**
