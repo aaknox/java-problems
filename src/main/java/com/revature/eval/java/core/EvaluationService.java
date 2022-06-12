@@ -788,7 +788,7 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
-		System.out.println(given);
+		//System.out.println(given);
 		Period GIGA_SECOND = Period.ofDays(11574);
 		DateTimeFormatter dateTimeFormatter = null;
 		String dateValue = null;
@@ -796,9 +796,9 @@ public class EvaluationService {
 		if(given.toString().contains("T")) {
 			//2015-01-24T22:00
 			dateValue = given.toString().substring(0, 10);
-			System.out.println(dateValue);
+			//System.out.println(dateValue);
 			timeValue = given.toString().substring(11).concat(":00");
-			System.out.println(timeValue);
+			//System.out.println(timeValue);
 			dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		}else {
 			
@@ -809,21 +809,21 @@ public class EvaluationService {
 			TemporalAccessor temporalAccessor = dateTimeFormatter.parse(given.toString());
 			//System.out.println("temporalAccessor: " + LocalDate.from(temporalAccessor));
 			LocalDate date = LocalDate.from(temporalAccessor).plus(GIGA_SECOND);
-			System.out.println(date);
+			//System.out.println(date);
 			
 			//now need to set time
 			LocalDateTime todaytime = LocalDateTime.of(date, LocalTime.MIDNIGHT).plusHours(1).plusMinutes(46).plusSeconds(40);
-			System.out.println(todaytime);
+			//System.out.println(todaytime);
 			return todaytime;
 		}else {
 			//there is a time value in given this time
 			TemporalAccessor temporalAccessor = dateTimeFormatter.parse(dateValue.toString());
 			LocalDate date = LocalDate.from(temporalAccessor).plus(GIGA_SECOND);
-			System.out.println("DATE CHECK: " + date);
+			//System.out.println("DATE CHECK: " + date);
 			
 			String[] results = timeValue.replaceAll(":", "").split("(?<=\\G.{" + 2 + "})");
 			LocalDateTime todaytime = LocalDateTime.of(date, LocalTime.of(Integer.valueOf(results[0]), Integer.valueOf(results[1]), Integer.valueOf(results[2]))).plusHours(1).plusMinutes(46).plusSeconds(40);
-			System.out.println(todaytime);
+			//System.out.println(todaytime);
 			return todaytime;
 		}
 	}
@@ -842,8 +842,23 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getSumOfMultiples(int i, int[] set) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		List<Integer> multiples = new ArrayList<>();
+		for(int count = set[0]; count < i; count++) {
+			for(int j = 0; j < set.length; j++) {
+				if(count % set[j] == 0) {
+					if(!multiples.contains(count)) {
+						multiples.add(count);
+					}
+				}
+			}
+		}
+		
+		int result = 0;
+		for (Integer m : multiples) {
+			result += m;
+		}
+		
+		return result;
 	}
 
 	/**
