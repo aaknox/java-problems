@@ -1,13 +1,29 @@
 package com.revature.eval.java.core;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
+
+import javax.swing.text.DateFormatter;
 
 public class EvaluationService {
 
@@ -640,43 +656,36 @@ public class EvaluationService {
 		 * @param string
 		 * @return
 		 */
-		
+
 		public static String transform(String text) {
-			//\W = any character that is not a word
-			//here we are replace 1+ non-words with empty char
+			// \W = any character that is not a word
+			// here we are replace 1+ non-words with empty char
 			return text.replaceAll("\\W+", "")
-					//lowercase all letter in string
+					// lowercase all letter in string
 					.toLowerCase()
-					//The codePoints() = gets a stream of code point values from the given sequence
-					//returns the ASCII values of the characters passed as an argument
+					// The codePoints() = gets a stream of code point values from the given sequence
+					// returns the ASCII values of the characters passed as an argument
 					.codePoints()
-					// returns a stream consisting of the results of applying the given 
-					//function to the elements of this stream
-					// true if char is letter value then return the reverse ASCII value of that letter 
-					//and append to output
-					//false return original ascii value of that character
-					.map(code -> Character.isAlphabetic(code)
-		                ? 2 * ((int) 'a') + 25 - code
-		                : code
-					)
-					//collect() = allow to perform operations on our output results 
-					//= appending chars to output string using StringBuilder
-					.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-					.toString();
+					// returns a stream consisting of the results of applying the given
+					// function to the elements of this stream
+					// true if char is letter value then return the reverse ASCII value of that
+					// letter
+					// and append to output
+					// false return original ascii value of that character
+					.map(code -> Character.isAlphabetic(code) ? 2 * ((int) 'a') + 25 - code : code)
+					// collect() = allow to perform operations on our output results
+					// = appending chars to output string using StringBuilder
+					.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
 		}
 
 		public static String encode(String string) {
-			//regex explanation:
+			// regex explanation:
 			/*
-			 * CapturingGroup
-				ZeroWidthPositiveLookbehind
-				Sequence: match all of the followings in order
-				EndOfPreviousMatch
-				Repeat
-				AnyCharacterExcept\n
-				5 times
+			 * CapturingGroup ZeroWidthPositiveLookbehind Sequence: match all of the
+			 * followings in order EndOfPreviousMatch Repeat AnyCharacterExcept\n 5 times
 			 */
-			//meaning: every 5 characters will have a space between them as long as they match regex pattern
+			// meaning: every 5 characters will have a space between them as long as they
+			// match regex pattern
 			String output = String.join(" ", transform(string).split("(?<=\\G.{5})"));
 			return output;
 		}
@@ -716,33 +725,24 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isValidIsbn(String string) {
-		System.out.println(string);
+		// System.out.println(string);
 		String target = string.replaceAll("-", "");
-		System.out.println(target);
+		// System.out.println(target);
 		char[] numbers = target.toCharArray();
 		int count;
 		int i = 0;
 		Map<String, Character> map = new HashMap<>();
-		for(count = 1; count <= 10; count++) {
-			map.put("x"+ count, numbers[i]);
+		for (count = 1; count <= 10; count++) {
+			map.put("x" + count, numbers[i]);
 			i++;
 		}
-		System.out.println(map.toString());
-		if(map.get("x10") == 'X') {
-			System.out.println("Last digit is X - returning true \n");
+		// System.out.println(map.toString());
+		if (map.get("x10") == 'X') {
 			return true;
-		}else {
-			int calc = Math.floorMod((map.get("x1") * 10 
-					+ map.get("x2") * 9 
-					+ map.get("x3") * 8 
-					+ map.get("x4") * 7 
-					+ map.get("x5") * 6 
-					+ map.get("x6") * 5 
-					+ map.get("x7") * 4 
-					+ map.get("x8") * 3 
-					+ map.get("x9") * 2 
+		} else {
+			int calc = Math.floorMod((map.get("x1") * 10 + map.get("x2") * 9 + map.get("x3") * 8 + map.get("x4") * 7
+					+ map.get("x5") * 6 + map.get("x6") * 5 + map.get("x7") * 4 + map.get("x8") * 3 + map.get("x9") * 2
 					+ map.get("x10") * 1), 11);
-			System.out.println("RESULT: " + calc + "\n");
 			return calc == 0 ? true : false;
 		}
 	}
@@ -761,8 +761,22 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isPangram(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		char[] phrase = string.replaceAll(" ", "").toLowerCase().toCharArray();
+		Map<Character, Integer> charCount = new HashMap<>();
+
+		if (string.isEmpty()) {
+			return false;
+		} else {
+			for (char c : phrase) {
+				if (charCount.containsKey(c)) {
+					charCount.put(c, charCount.get(c) + 1);
+				} else {
+					charCount.put(c, 1);
+				}
+			}
+
+			return charCount.entrySet().size() == 26 ? true : false;
+		}
 	}
 
 	/**
@@ -774,8 +788,44 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		System.out.println(given);
+		Period GIGA_SECOND = Period.ofDays(11574);
+		DateTimeFormatter dateTimeFormatter = null;
+		String dateValue = null;
+		String timeValue = null;
+		if(given.toString().contains("T")) {
+			//2015-01-24T22:00
+			dateValue = given.toString().substring(0, 10);
+			System.out.println(dateValue);
+			timeValue = given.toString().substring(11).concat(":00");
+			System.out.println(timeValue);
+			dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		}else {
+			
+			dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		}
+		
+		if(timeValue == null) {
+			TemporalAccessor temporalAccessor = dateTimeFormatter.parse(given.toString());
+			//System.out.println("temporalAccessor: " + LocalDate.from(temporalAccessor));
+			LocalDate date = LocalDate.from(temporalAccessor).plus(GIGA_SECOND);
+			System.out.println(date);
+			
+			//now need to set time
+			LocalDateTime todaytime = LocalDateTime.of(date, LocalTime.MIDNIGHT).plusHours(1).plusMinutes(46).plusSeconds(40);
+			System.out.println(todaytime);
+			return todaytime;
+		}else {
+			//there is a time value in given this time
+			TemporalAccessor temporalAccessor = dateTimeFormatter.parse(dateValue.toString());
+			LocalDate date = LocalDate.from(temporalAccessor).plus(GIGA_SECOND);
+			System.out.println("DATE CHECK: " + date);
+			
+			String[] results = timeValue.replaceAll(":", "").split("(?<=\\G.{" + 2 + "})");
+			LocalDateTime todaytime = LocalDateTime.of(date, LocalTime.of(Integer.valueOf(results[0]), Integer.valueOf(results[1]), Integer.valueOf(results[2]))).plusHours(1).plusMinutes(46).plusSeconds(40);
+			System.out.println(todaytime);
+			return todaytime;
+		}
 	}
 
 	/**
