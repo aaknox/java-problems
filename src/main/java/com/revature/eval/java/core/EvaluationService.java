@@ -1,29 +1,17 @@
 package com.revature.eval.java.core;
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.regex.Pattern;
-
-import javax.swing.text.DateFormatter;
 
 public class EvaluationService {
 
@@ -911,6 +899,8 @@ public class EvaluationService {
 			String target = string.replaceAll(" ", "");
 			int[] numbers = target.chars().map(x -> x - '0').toArray();
 			List<Integer> results = new ArrayList<>();
+			
+			@SuppressWarnings("unused")
 			int count = 0;
 			
 			for (int i = numbers.length-1; i >= 0; i--) {
@@ -964,8 +954,38 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int solveWordProblem(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		String problem = string.replaceAll("What is ", "").replace("?", "");
+		String[] words = problem.split(" ");
+		//convert the first and last elements into numbers
+		int num1 = Integer.valueOf(words[0]);
+		//need to check if length of words array is 3 (plus/minus) or 4 (multiplied by/divided by)
+		//^ this will determine the position of num2 in array
+		int num2 = 0;
+		if(words.length == 3) {
+			num2 = Integer.valueOf(words[2]);
+		}else {
+			num2 = Integer.valueOf(words[3]);
+		}
+		
+		int result = 0;
+		switch (words[1]) {
+			case "plus":
+				result = num1 + num2;
+				break;
+			case "minus":
+				result = num1 - num2;
+				break;
+			case "multiplied":
+				result = num1 * num2;
+				break;
+			case "divided":
+				result = num1 / num2;
+				break;
+			default:
+				break;
+		}
+		
+		return result;
 	}
 
 }

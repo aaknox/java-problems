@@ -15,11 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+//import org.junit.Ignore; //used mostly for isolating test while debugging
 
 @RunWith(OrderedRunner.class)
 public class EvaluationServiceTest {
@@ -786,35 +786,30 @@ public class EvaluationServiceTest {
 	 ******************************************************************/
 	@Test
 	@Order(order = 96)
-	@Ignore
 	public void testSingleAddition1() {
 		assertEquals(2, evaluationService.solveWordProblem("What is 1 plus 1?"));
 	}
 
 	@Test
 	@Order(order = 97)
-	@Ignore
 	public void testSingleAdditionWithNegativeNumbers() {
 		assertEquals(-11, evaluationService.solveWordProblem("What is -1 plus -10?"));
 	}
 
 	@Test
 	@Order(order = 98)
-	@Ignore
 	public void testSingleSubtraction() {
 		assertEquals(16, evaluationService.solveWordProblem("What is 4 minus -12?"));
 	}
 
 	@Test
 	@Order(order = 99)
-	@Ignore
 	public void testSingleMultiplication() {
 		assertEquals(-75, evaluationService.solveWordProblem("What is -3 multiplied by 25?"));
 	}
 
 	@Test
 	@Order(order = 100)
-	@Ignore
 	public void testSingleDivision() {
 		assertEquals(-11, evaluationService.solveWordProblem("What is 33 divided by -3?"));
 	}
